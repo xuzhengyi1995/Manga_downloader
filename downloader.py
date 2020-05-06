@@ -53,6 +53,8 @@ class Downloader:
                 self.actions_class = temp_actions_class()
                 logging.info('Find action class, use %s class.',
                              self.actions_class.get_class_name())
+                break
+
         if not is_implemented_website:
             logging.error('This website has not been added...')
             raise NotImplementedError

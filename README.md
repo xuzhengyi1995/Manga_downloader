@@ -189,13 +189,13 @@ A Manga download framework using `selenium`.
 
         def get_sum_page_count(self, driver):
             '''
-            This method return an integer, sum page.
+            This method return an integer, get total page number.
             '''
             return int(str(driver.find_element_by_id('pageSliderCounter').text).split('/')[1])
 
         def move_to_page(self, driver, page):
             '''
-            This method return nothing, move to given page.
+            This method return nothing, move to given page number.
             '''
             driver.execute_script(
                 'NFBR.a6G.Initializer.B0U.menu.a6l.moveToPage(%d)' % page)
@@ -209,7 +209,7 @@ A Manga download framework using `selenium`.
 
         def get_imgdata(self, driver, now_page):
             '''
-            This method return String/something can be written to file or convert to BytesIO, wait manga loading.
+            This method return String/something can be written to file or convert to BytesIO, get image data.
             '''
             canvas = driver.find_element_by_css_selector(".currentScreen canvas")
             img_base64 = driver.execute_script(
@@ -218,7 +218,7 @@ A Manga download framework using `selenium`.
 
         def get_now_page(self, driver):
             '''
-            This method return an integer, the page number on the page
+            This method return an integer, the page number on the current page
             '''
             return int(str(driver.find_element_by_id('pageSliderCounter').text).split('/')[0])
     ```

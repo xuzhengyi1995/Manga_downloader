@@ -37,7 +37,10 @@ class Downloader:
     Main download class
     '''
 
-    def __init__(self, manga_url, cookies, imgdir, res, sleep_time=2, loading_wait_time=20, cut_image=None):
+    def __init__(
+            self, manga_url, cookies, imgdir, res, sleep_time=2, loading_wait_time=20,
+            cut_image=None, file_name_prefix='', number_of_digits=3
+    ):
         self.manga_url = manga_url
         self.cookies = get_cookie_dict(cookies)
         self.imgdir = imgdir
@@ -45,6 +48,11 @@ class Downloader:
         self.sleep_time = sleep_time
         self.loading_wait_time = loading_wait_time
         self.cut_image = cut_image
+        self.file_name_model = '/'
+        if len(file_name_prefix) != 0:
+            self.file_name_model += file_name_prefix + '_'
+
+        self.file_name_model += '%%0%dd.jpg' % number_of_digits
 
         is_implemented_website = False
         for temp_actions_class in WebsiteActions.__subclasses__():
@@ -114,7 +122,7 @@ class Downloader:
             for i in range(page_count):
                 self.actions_class.wait_loading(driver)
                 image_data = self.actions_class.get_imgdata(driver, i + 1)
-                with open(self.imgdir + '/%d.jpg' % i, 'wb') as img_file:
+                with open(self.imgdir + self.file_name_model % i, 'wb') as img_file:
                     if self.cut_image is None:
                         img_file.write(image_data)
                     else:

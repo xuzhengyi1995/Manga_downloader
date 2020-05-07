@@ -21,6 +21,36 @@ A Manga download framework using `selenium`.
 
 # How to Use
 
+## All settings
+
+All the settings are in `main.py`.
+
+```python
+settings = {
+    # Manga url
+    'manga_url': 'MANGA_URL',
+    # Your cookies
+    'cookies': 'YOUR_COOKIES_HERE',
+    # Folder name to store the Manga
+    'imgdir': 'IMGDIR',
+    # Resolution, (Width, Height), For coma this doesn't matter.
+    'res': (784, 1200),
+    # Sleep time for each page (Second), normally no need to change.
+    'sleep_time': 2,
+    # Time wait for page loading (Second), if your network is good, you can reduce this paramater.
+    'loading_wait_time': 20,
+    # Cut image, (left, upper, right, lower) in pixel, None means do not cut the image. This often used to cut the edge.
+    # Like (0, 0, 0, 3) means cut 3 pixel from bottom of the image.
+    'cut_image': None,
+    # File name prefix, if you want your file name like 'klk_v1_001.jpg', write 'klk_v1' here.
+    'file_name_prefix': '',
+    # File name digits count, if you want your file name like '001.jpg', write 3 here.
+    'number_of_digits': 3
+}
+```
+
+## Install environment & How to Get URL/Cookies
+
 **This program now work for Chrome, if you use another browser, please check [this page](https://selenium-python.readthedocs.io/installation.html)**
 
 0.  Install python packages _selenium_ and _pillow_ and get the _Google chrome Drivers_.
@@ -132,6 +162,28 @@ A Manga download framework using `selenium`.
     ```
 
     By default it is `None`, means do not cut the image.
+
+6.  You can now change the file name prefix and number of digits by changing `file_name_prefix` and `number_of_digits`.
+
+    For example, if you are downloading Kill La Kill Manga Volume 1, and you want the file name like:
+
+    <pre>
+        KLK_V1
+        │--KLK_V1_001.jpg
+        │--KLK_V1_002.jpg
+        │--KLK_V1_003.jpg
+    </pre>
+
+    Then you can set the parameters like below:
+
+    ```python
+    settings = {
+        ...,
+        'file_name_prefix': 'KLK_V1',
+        # File name digits count, if you want your file name like '001.jpg', write 3 here.
+        'number_of_digits': 3
+    }
+    ```
 
 # Develop
 

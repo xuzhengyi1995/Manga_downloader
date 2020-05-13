@@ -5,7 +5,9 @@ import base64
 import logging
 import os
 import time
+from io import BytesIO
 
+import PIL.Image as pil_image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -85,8 +87,6 @@ class Downloader:
         if not os.path.isdir(self.imgdir):
             os.mkdir(self.imgdir)
         if self.cut_image is not None:
-            import PIL.Image as pil_image
-            from io import BytesIO
             self.left, self.upper, self.right, self.lower = self.cut_image
         self.get_driver()
 
@@ -143,7 +143,7 @@ class Downloader:
 
                 time.sleep(self.sleep_time)
         except Exception as err:
-            with open("error.html", "w") as err_source:
+            with open("error.html", "w", encoding="utf-8") as err_source:
                 err_source.write(driver.page_source)
             driver.save_screenshot('./error.png')
             logging.error('Something wrong or download finished,Please check the error.png to see the web page.\r\nNormally, you should logout and login, then renew the cookies to solve this problem.')

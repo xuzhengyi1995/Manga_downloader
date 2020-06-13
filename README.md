@@ -45,7 +45,11 @@ settings = {
     # File name prefix, if you want your file name like 'klk_v1_001.jpg', write 'klk_v1' here.
     'file_name_prefix': '',
     # File name digits count, if you want your file name like '001.jpg', write 3 here.
-    'number_of_digits': 3
+    'number_of_digits': 3,
+    # Start page, if you want to download from page 3, set this to 3, None means from 0
+    'start_page': None,
+    # End page, if you want to download until page 10, set this to 10, None means until finished
+    'end_page': None,
 }
 ```
 

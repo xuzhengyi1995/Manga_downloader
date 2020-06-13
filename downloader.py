@@ -41,7 +41,8 @@ class Downloader:
 
     def __init__(
             self, manga_url, cookies, imgdir, res, sleep_time=2, loading_wait_time=20,
-            cut_image=None, file_name_prefix='', number_of_digits=3
+            cut_image=None, file_name_prefix='', number_of_digits=3, start_page=None,
+            end_page=None
     ):
         self.manga_url = manga_url
         self.cookies = get_cookie_dict(cookies)
@@ -55,6 +56,8 @@ class Downloader:
             self.file_name_model += file_name_prefix + '_'
 
         self.file_name_model += '%%0%dd.jpg' % number_of_digits
+        self.start_page = start_page - 1 if start_page and start_page > 0 else 0
+        self.end_page = end_page
 
         is_implemented_website = False
         for temp_actions_class in WebsiteActions.__subclasses__():
@@ -115,11 +118,14 @@ class Downloader:
         try:
             page_count = self.actions_class.get_sum_page_count(driver)
             logging.info('Has %d pages.', page_count)
-            self.actions_class.move_to_page(driver, 0)
+            end_page = page_count
+            if self.end_page and self.end_page <= page_count:
+                end_page = self.end_page
+            self.actions_class.move_to_page(driver, self.start_page)
 
             time.sleep(self.sleep_time)
 
-            for i in range(page_count):
+            for i in range(self.start_page, end_page):
                 self.actions_class.wait_loading(driver)
                 image_data = self.actions_class.get_imgdata(driver, i + 1)
                 with open(self.imgdir + self.file_name_model % i, 'wb') as img_file:

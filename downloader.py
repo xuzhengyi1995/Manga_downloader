@@ -159,3 +159,5 @@ class Downloader:
         self.login()
         self.prepare_download()
         self.download_book()
+        self.driver.close()
+        self.driver.quit()

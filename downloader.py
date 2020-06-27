@@ -154,6 +154,8 @@ class Downloader:
             driver.save_screenshot('./error.png')
             logging.error('Something wrong or download finished,Please check the error.png to see the web page.\r\nNormally, you should logout and login, then renew the cookies to solve this problem.')
             logging.error(err)
+            self.driver.close()
+            self.driver.quit()
 
     def download(self):
         self.login()

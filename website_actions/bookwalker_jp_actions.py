@@ -40,13 +40,13 @@ class BookwalkerJP(WebsiteActions):
             'NFBR.a6G.Initializer.B0U.menu.a6l.moveToPage(%d)' % page)
 
     def wait_loading(self, driver):
-        WebDriverWait(driver, 30).until_not(lambda x: self.check_is_loading(
+        WebDriverWait(driver, 600).until_not(lambda x: self.check_is_loading(
             x.find_elements_by_css_selector(".loading")))
 
     def get_imgdata(self, driver, now_page):
         canvas = driver.find_element_by_css_selector(".currentScreen canvas")
         img_base64 = driver.execute_script(
-            "return arguments[0].toDataURL('image/jpeg').substring(22);", canvas)
+            "return arguments[0].toDataURL('image/png', 1.0).substring(21);", canvas)
         return base64.b64decode(img_base64)
 
     def get_now_page(self, driver):

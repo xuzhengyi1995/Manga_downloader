@@ -38,7 +38,7 @@ class CmoaJP(WebsiteActions):
 
     @staticmethod
     def check_url(manga_url):
-        return manga_url.find('cmoa.jp') != -1
+        return manga_url.find('cmoa.jp/bib/speedreader') != -1
 
     def get_sum_page_count(self, driver):
         return int(str(driver.execute_script("return document.getElementById('menu_slidercaption').innerHTML")).split('/')[1])
@@ -48,7 +48,7 @@ class CmoaJP(WebsiteActions):
             'SpeedBinb.getInstance("content").moveTo(%d)' % page)
 
     def wait_loading(self, driver):
-        WebDriverWait(driver, 30).until_not(
+        WebDriverWait(driver, 600).until_not(
             lambda x: x.find_element_by_id("start_wait"))
 
     def get_imgdata(self, driver, now_page):
@@ -73,7 +73,7 @@ class CmoaJP(WebsiteActions):
             final_img.paste(imgs_arr[i], (0, last_img_height * i))
 
         final_data = BytesIO()
-        final_img.save(final_data, format='JPEG')
+        final_img.save(final_data, format='PNG')
         return final_data.getbuffer()
 
     def get_now_page(self, driver):

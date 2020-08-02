@@ -12,6 +12,10 @@ A Manga download framework using `selenium`.
 
 **If the website you given is unsupported, the program will raise an error.**
 
+**Now support multi manga download with only login one time**
+
+**现在支持批量下载**
+
 **you should prepare the information below:**
 
 1.  Manga URL
@@ -27,17 +31,23 @@ All the settings are in `main.py`.
 
 ```python
 settings = {
-    # Manga url
-    'manga_url': 'MANGA_URL',
+    # Manga urls, should be the same website
+    'manga_url': [
+        'URL_1',
+        'URL_2'
+    ],
     # Your cookies
     'cookies': 'YOUR_COOKIES_HERE',
-    # Folder name to store the Manga
-    'imgdir': 'IMGDIR',
-    # Resolution, (Width, Height), For coma this doesn't matter.
-    'res': (784, 1200),
+    # Folder names to store the Manga, the same order with manga_url
+    'imgdir': [
+        'IMGDIR_FOR_URL_1',
+        'IMGDIR_FOR_URL_2'
+    ],
+    # Resolution, (Width, Height), For cmoa.jp this doesn't matter.
+    'res': (1393, 2048),
     # Sleep time for each page (Second), normally no need to change.
     'sleep_time': 2,
-    # Time wait for page loading (Second), if your network is good, you can reduce this paramater.
+    # Time wait for page loading (Second), if your network is good, you can reduce this parameter.
     'loading_wait_time': 20,
     # Cut image, (left, upper, right, lower) in pixel, None means do not cut the image. This often used to cut the edge.
     # Like (0, 0, 0, 3) means cut 3 pixel from bottom of the image.

@@ -5,16 +5,22 @@ Main file
 from downloader import Downloader
 
 settings = {
-    # Manga url
-    'manga_url': 'MANGA_URL',
+    # Manga urls, should be the same website
+    'manga_url': [
+        'URL_1',
+        'URL_2'
+    ],
     # Your cookies
     'cookies': 'YOUR_COOKIES_HERE',
-    # Folder name to store the Manga
-    'imgdir': 'IMGDIR',
+    # Folder names to store the Manga, the same order with manga_url
+    'imgdir': [
+        'IMGDIR_FOR_URL_1',
+        'IMGDIR_FOR_URL_2'
+    ],
     # Resolution, (Width, Height), For coma this doesn't matter.
     'res': (784, 1200),
     # Sleep time for each page (Second), normally no need to change.
-    'sleep_time': 2,
+    'sleep_time': 1,
     # Time wait for page loading (Second), if your network is good, you can reduce this parameter.
     'loading_wait_time': 20,
     # Cut image, (left, upper, right, lower) in pixel, None means do not cut the image. This often used to cut the edge.

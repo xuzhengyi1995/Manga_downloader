@@ -63,14 +63,14 @@ class CmoaJP(WebsiteActions):
             part_img = pil_image.open(BytesIO(image_data))
             imgs_arr.append(part_img)
             width, height = part_img.size
-            imgs_height.append(height)
+            imgs_height.append(height+imgs_height[-1]-4)
 
         last_img_height = imgs_height.pop()
 
-        final_img = pil_image.new('RGB', (width, last_img_height * 3))
+        final_img = pil_image.new('RGB', (width, last_img_height))
 
         for i in range(len(imgs_arr)):
-            final_img.paste(imgs_arr[i], (0, last_img_height * i))
+            final_img.paste(imgs_arr[i], (0, imgs_height[i]))
 
         final_data = BytesIO()
         final_img.save(final_data, format='PNG')

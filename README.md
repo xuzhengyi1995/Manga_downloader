@@ -69,7 +69,7 @@ settings = {
 
 0.  Install python packages _selenium_ and _pillow_ and get the _Google chrome Drivers_.
 
-    1.  For _selenuim_ ad _pillow_:
+    1.  For _selenium_ ad _pillow_:
 
     ```shell
     pip install selenium

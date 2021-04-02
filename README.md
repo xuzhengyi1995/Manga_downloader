@@ -74,6 +74,8 @@ settings = {
     ```shell
     pip install selenium
     pip install Pillow
+    # This undetected_chromedriver is prevent us from been detected by BW
+    pip install undetected_chromedriver
     ```
 
     2.  For Google chrome Drivers:

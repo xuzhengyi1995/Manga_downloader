@@ -9,6 +9,7 @@ import time
 from io import BytesIO
 
 import PIL.Image as pil_image
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -86,7 +87,8 @@ class Downloader:
             "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36")
         option.add_argument('window-size=%d,%d' % self.res)
         option.add_argument('headless')
-        self.driver = webdriver.Chrome(chrome_options=option)
+        # self.driver = webdriver.Chrome(chrome_options=option)
+        self.driver = uc.Chrome(options=option)
         self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
             "source": """
               Object.defineProperty(navigator, 'webdriver', {

@@ -87,6 +87,13 @@ class Downloader:
         option.add_argument('window-size=%d,%d' % self.res)
         option.add_argument('headless')
         self.driver = webdriver.Chrome(chrome_options=option)
+        self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+              Object.defineProperty(navigator, 'webdriver', {
+                get: () => false
+              })
+            """
+        })
 
     def init_function(self):
         if self.cut_image is not None:

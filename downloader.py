@@ -86,7 +86,7 @@ class Downloader:
         option.add_argument(
             "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36")
         option.add_argument('window-size=%d,%d' % self.res)
-        # option.add_argument('headless')
+        option.add_argument('headless')
         # self.driver = webdriver.Chrome(chrome_options=option)
         self.driver = uc.Chrome(options=option)
         self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
@@ -94,6 +94,19 @@ class Downloader:
               Object.defineProperty(navigator, 'webdriver', {
                 get: () => false
               })
+              window.navigator.chrome = undefined;
+              Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en'],
+              });
+              Object.defineProperty(navigator, 'plugins', {
+                get: () => [1, 2, 3, 4, 5],
+              });
+              const originalQuery = window.navigator.permissions.query;
+              window.navigator.permissions.query = (parameters) => (
+                parameters.name === 'notifications' ?
+                Promise.resolve({ state: Notification.permission }) :
+                originalQuery(parameters)
+              );
             """
         })
 

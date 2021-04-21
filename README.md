@@ -101,15 +101,24 @@ settings = {
 
     1.  For [Bookwalker.jp] cookies, go [here](https://member.bookwalker.jp/app/03/my/profile).
     2.  For [Bookwalker.com.jp] cookies, go [here](https://www.bookwalker.com.tw/member).
-    3.  For [www.cmoa.jp] cookies, go [here](https://www.cmoa.jp/). **This website I'm not sure, because I can not buy manga on it. If there is any problem, please let me know.**
+    3.  For [www.cmoa.jp] cookies, go [here](https://www.cmoa.jp/) and you **must** get cookies by plug-in [EditThisCookie](http://www.editthiscookie.com/), download it for chrome [here](https://chrome.google.com/webstore/detail/edit-this-cookie/fngmhnnpilhplaeedifhccceomclgfbg).
 
-    > 1.  Open the page.
-    > 2.  Press F12.
-    > 3.  Click on the _Network_.
-    > 4.  Refresh the page.
-    > 5.  Find the first _profile_ request, click it.
-    > 6.  On the right, there will be a _Request Headers_, go there.
-    > 7.  Find the _cookie:...._, copy the string after the _cookie:_, paste to the _main.py_, _YOUR_COOKIES_HERE_
+    -   For `EditThisCookie`, this can be used in any website above, but for `cmoa` you **must** use this method
+
+        1.  Go to user preferences (chrome-extension://fngmhnnpilhplaeedifhccceomclgfbg/options_pages/user_preferences.html) of `EditThisCookie`
+        2.  Set the cookie export format to `Semicolon separated name=value pairs`
+        3.  Go to [cmoa](https://www.cmoa.jp/), click the `EditThisCookie` and click `export` button
+        4.  Copy the cookies in the file (**After the `// Example: http://www.tutorialspoint.com/javascript/javascript_cookies.htm`**) into the program
+
+    -   For the traditional way
+
+        > 1.  Open the page.
+        > 2.  Press F12.
+        > 3.  Click on the _Network_.
+        > 4.  Refresh the page.
+        > 5.  Find the first _profile_ request, click it.
+        > 6.  On the right, there will be a _Request Headers_, go there.
+        > 7.  Find the _cookie:...._, copy the string after the _cookie:_, paste to the _main.py_, _YOUR_COOKIES_HERE_
 
 3.  Change the _manga_url_ in the _main.py_.
 
@@ -208,11 +217,11 @@ settings = {
     To download Manga, normally we do like this:
 
     <pre>
-    +------------+     +-----------+      +------------+      +-------------------+    +--------------+
-    |            |     |           |      |            |      |                   |OVER|              |
-    |   Login    +-----+ Load page +----->+ Save image +----->+ Move to next page +----+   Finished   |
-    |            |     |           |      |            |      |                   |    |              |
-    +------------+     +-----------+      +-----+------+      +---------+---------+    +--------------+
+    +------------+     +-----------+      +------------+      +-------------------+      +--------------+
+    |            |     |           |      |            |      |                   | OVER |              |
+    |   Login    +-----+ Load page +----->+ Save image +----->+ Move to next page +----->+   Finished   |
+    |            |     |           |      |            |      |                   |      |              |
+    +------------+     +-----------+      +-----+------+      +---------+---------+      +--------------+
                                                 ^                       |
                                                 |                       |
                                                 |      More page        |

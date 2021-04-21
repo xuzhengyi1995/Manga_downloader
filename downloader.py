@@ -23,11 +23,15 @@ logging.basicConfig(format='[%(levelname)s](%(name)s) %(asctime)s : %(message)s'
 
 
 def get_cookie_dict(cookies):
-    cookies = cookies.split('; ')
+    cookies_split = cookies.split('; ')
+    if len(cookies_split) == 1:
+        cookies_split = cookies.split(';')
     cookies_dict = {}
-    for i in cookies:
+    for i in cookies_split:
+        if i == '':
+            continue
         kv = i.split('=')
-        cookies_dict[kv[0]] = "=".join(kv[1:])
+        cookies_dict[kv[0]] = '='.join(kv[1:])
     return cookies_dict
 
 

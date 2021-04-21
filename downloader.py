@@ -27,7 +27,7 @@ def get_cookie_dict(cookies):
     cookies_dict = {}
     for i in cookies:
         kv = i.split('=')
-        cookies_dict[kv[0]] = kv[1]
+        cookies_dict[kv[0]] = "=".join(kv[1:])
     return cookies_dict
 
 

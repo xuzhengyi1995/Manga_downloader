@@ -57,15 +57,16 @@ class CmoaJP(WebsiteActions):
 
         imgs_arr = []
         imgs_height = [0]
+        mmset = 4
         for i in image_elements:
             blob_url = i.get_attribute('src')
             image_data = self.get_file_content_chrome(driver, blob_url)
             part_img = pil_image.open(BytesIO(image_data))
             imgs_arr.append(part_img)
             width, height = part_img.size
-            imgs_height.append(height+imgs_height[-1]-4)
+            imgs_height.append(height + imgs_height[-1] - mmset)
 
-        last_img_height = imgs_height.pop()
+        last_img_height = imgs_height.pop() + mmset
 
         final_img = pil_image.new('RGB', (width, last_img_height))
 

@@ -1,3 +1,50 @@
+# NEW METHOD FOR BW TO TRY!
+
+**If you are finding something to download BW, please try this method for BW, it's really a good thing to try, you will like it!**
+
+**For coma, please see below.**
+
+Now have a new method, with a customized `chromium` browser, it can download BW original image with it's original size very easily. It can download both manga and novel, and may be used to every website that use canvas to render the page (now only tested on BW).
+
+It is only a dev version, may have bugs and may crash, but you can download the customized browser and try it now.
+
+**Do not use it for other website, only use it as a BW downloader, it is not as safe as normal chrome browser!**
+
+Clone this repo or only download the [BW-downloader-chrome-bin.zip](https://github.com/xuzhengyi1995/Manga_downloader/raw/master/BW-downloader-chrome-bin.zip)
+
+1.  Unzip the file `BW-downloader-chrome-bin.zip`.
+2.  Open a `powsershell` or `cmd`, `cd` to the unzipped browser dir.
+3.  Open the browser with command line `.\chrome.exe --user-data-dir=c:\bw-downloader-profile --no-sandbox`
+4.  Adjust your browser window size, make it smaller and can only display one manga page, example below
+    ![image](<>)
+
+5.  You can now go to BW website, log in and open the manga you want to download, remember to reset the manga's read status before you open it.
+6.  Press `F12`, make it a separate window (see the image below) and run the script below (just go to `console` and copy-past the code, press enter) to move the page automatically, if your network is good, you can change the `3000` to a smaller number, 3000 means 3000ms -> 3s, every 3s it will move to the next page.
+
+    You can also manually click the mouse left button / use a keyboard arrow key to move the page, you can choose the way you like, just make sure the page is moving.
+
+    ```js
+    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.c8t.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+    ```
+
+    ![image](https://user-images.githubusercontent.com/29002064/138590508-e7555a2d-1528-4e59-8a50-e08e407bc1be.png)
+
+
+7.  Now you can check your `C:\bw_export_data`, you can find a random uuid folder with all the manga images in it.
+    ![image](<>)
+
+If you want to download multiple manga at the same time, just open as many manga as you want, and do the step 5 to 6.
+
+This method is very easy to use, stable and no need to find any resolution or cookies, and it can download the real original image with no barcode.
+
+Maybe will add a new browser ui to it and can click to download in the future.
+
+May not download the front page now.
+
+Only built on windows, no program now for other platform.
+
+If you find some problem, please file a bug, thank you!
+
 # Manga_Downloader
 
 A Manga download framework using `selenium`.

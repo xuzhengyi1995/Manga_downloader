@@ -22,7 +22,12 @@ Clone this repo or only download the [BW-downloader-chrome-bin.zip](https://gith
 6.  Press `F12`, make it a separate window (see the image below) and run the script below (just go to `console` and copy-past the code, press enter) to move the page automatically, if your network is good, you can change the `3000` to a smaller number, 3000 means 3000ms -> 3s, every 3s it will move to the next page.
 
     You can also manually click the mouse left button / use a keyboard arrow key to move the page, you can choose the way you like, just make sure the page is moving.
-
+    ```js
+    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.Z4p.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+    ```
+    
+    If this not work and show 'Uncaught TypeError: Cannot read properties of undefined (reading 'menu') at <anonymous>:1:54', please try below:
+    
     ```js
     window.i=0;setInterval(()=>{NFBR.a6G.Initializer.c8t.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
     ```

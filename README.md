@@ -16,27 +16,24 @@ Clone this repo or only download the [BW-downloader-chrome-bin.zip](https://gith
 2.  Open a `powsershell` or `cmd`, `cd` to the unzipped browser dir.
 3.  Open the browser with command line `.\chrome.exe --user-data-dir=c:\bw-downloader-profile --no-sandbox`
 4.  Adjust your browser window size, make it smaller and can only display one manga page, example below
-    ![image](<>)
+    ![image](https://user-images.githubusercontent.com/29002064/139255318-95531cd9-c442-4a61-acb4-cef3d71b7190.png)
+
 
 5.  You can now go to BW website, log in and open the manga you want to download, remember to reset the manga's read status before you open it.
 6.  Press `F12`, make it a separate window (see the image below) and run the script below (just go to `console` and copy-past the code, press enter) to move the page automatically, if your network is good, you can change the `3000` to a smaller number, 3000 means 3000ms -> 3s, every 3s it will move to the next page.
 
-    You can also manually click the mouse left button / use a keyboard arrow key to move the page, you can choose the way you like, just make sure the page is moving.
+    You can also manually click the mouse left button / use a keyboard arrow key / use a keyboard simulation software to move the page, you can choose the way you like, just make sure the page is moving.
     ```js
     window.i=0;setInterval(()=>{NFBR.a6G.Initializer.Z4p.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
     ```
     
-    If this not work and show 'Uncaught TypeError: Cannot read properties of undefined (reading 'menu') at <anonymous>:1:54', please try below:
-    
-    ```js
-    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.c8t.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
-    ```
+    If this not work and show 'Uncaught TypeError: Cannot read properties of undefined (reading 'menu') at <anonymous>:1:54', it means BW has updated the js, you can try to find it in the console, just try `NFBR.a6G.Initializer.*.menu` is not `undefined` and the * is the new object name; Or you can just file a bug.
 
     ![image](https://user-images.githubusercontent.com/29002064/138590508-e7555a2d-1528-4e59-8a50-e08e407bc1be.png)
 
 
 7.  Now you can check your `C:\bw_export_data`, you can find a random uuid folder with all the manga images in it.
-    ![image](<>)
+    ![image](https://user-images.githubusercontent.com/29002064/139255390-03b9191a-e90b-4572-9cde-b7e50ca9787c.png)
 
 If you want to download multiple manga at the same time, just open as many manga as you want, and do the step 5 to 6.
 
@@ -44,7 +41,7 @@ This method is very easy to use, stable and no need to find any resolution or co
 
 Maybe will add a new browser ui to it and can click to download in the future.
 
-May not download the front page now.
+May not download the cover page now.
 
 Only built on windows, no program now for other platform.
 

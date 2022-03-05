@@ -9,7 +9,7 @@ import time
 from io import BytesIO
 
 import PIL.Image as pil_image
-import undetected_chromedriver as uc
+import undetected_chromedriver._compat as uc
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys

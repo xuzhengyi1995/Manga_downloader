@@ -6,6 +6,7 @@ from io import BytesIO
 
 import PIL.Image as pil_image
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 try:
     from abstract_website_actions import WebsiteActions
@@ -49,11 +50,10 @@ class CmoaJP(WebsiteActions):
 
     def wait_loading(self, driver):
         WebDriverWait(driver, 600).until_not(
-            lambda x: x.find_element_by_id("start_wait"))
+            lambda x: x.find_element(By.ID, "start_wait"))
 
     def get_imgdata(self, driver, now_page):
-        image_elements = driver.find_element_by_id(
-            'content-p%d' % now_page).find_elements_by_css_selector('img')
+        image_elements = driver.find_element(By.ID, 'content-p%d' % now_page).find_elements(By.CSS_SELECTOR, 'img')
 
         imgs_arr = []
         imgs_height = [0]

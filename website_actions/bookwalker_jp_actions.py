@@ -4,6 +4,7 @@ Website actions for bookwalker.jp
 import base64
 
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 try:
     from abstract_website_actions import WebsiteActions
@@ -33,7 +34,7 @@ class BookwalkerJP(WebsiteActions):
         return manga_url.find('bookwalker.jp') != -1
 
     def get_sum_page_count(self, driver):
-        return int(str(driver.find_element_by_id('pageSliderCounter').text).split('/')[1])
+        return int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[1])
 
     def move_to_page(self, driver, page):
         driver.execute_script(
@@ -41,13 +42,13 @@ class BookwalkerJP(WebsiteActions):
 
     def wait_loading(self, driver):
         WebDriverWait(driver, 600).until_not(lambda x: self.check_is_loading(
-            x.find_elements_by_css_selector(".loading")))
+            x.find_elements(By.CSS_SELECTOR, ".loading")))
 
     def get_imgdata(self, driver, now_page):
-        canvas = driver.find_element_by_css_selector(".currentScreen canvas")
+        canvas = driver.find_element(By.CSS_SELECTOR, ".currentScreen canvas")
         img_base64 = driver.execute_script(
             "return arguments[0].toDataURL('image/png', 1.0).substring(21);", canvas)
         return base64.b64decode(img_base64)
 
     def get_now_page(self, driver):
-        return int(str(driver.find_element_by_id('pageSliderCounter').text).split('/')[0])
+        return int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])

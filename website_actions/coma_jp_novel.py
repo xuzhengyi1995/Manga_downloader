@@ -5,6 +5,7 @@ import base64
 import time
 
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 try:
     from abstract_website_actions import WebsiteActions
@@ -60,7 +61,7 @@ class CmoaJPNovels(WebsiteActions):
 
     def wait_loading(self, driver):
         WebDriverWait(driver, 600).until_not(
-            lambda x: x.find_element_by_id('ctmble_menu_notification_overlay_span').is_displayed())
+            lambda x: x.find_element(By.ID, 'ctmble_menu_notification_overlay_span').is_displayed())
 
     def get_imgdata(self, driver, now_page):
         return driver.get_screenshot_as_png()
@@ -70,7 +71,7 @@ class CmoaJPNovels(WebsiteActions):
 
     def before_download(self, driver):
         WebDriverWait(driver, 600).until_not(
-            lambda x: x.find_element_by_id('preMessage'))
-        driver.switch_to.frame(driver.find_element_by_id('binb'))
+            lambda x: x.find_element(By.ID, 'preMessage'))
+        driver.switch_to.frame(driver.find_element(By.ID, 'binb'))
         WebDriverWait(driver, 600).until_not(
-            lambda x: x.find_element_by_id('msg_outer_div').is_displayed())
+            lambda x: x.find_element(By.ID, 'msg_outer_div').is_displayed())

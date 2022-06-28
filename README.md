@@ -1,5 +1,7 @@
 # NEW METHOD FOR BW TO TRY!
 
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.1) or here: [Windows x64 release build v0.1](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.1/BW-downloader-chrome-bin.zip)
+
 **If you are finding something to download BW, please try this method for BW, it's really a good thing to try, you will like it!**
 
 **For coma, please see below.**

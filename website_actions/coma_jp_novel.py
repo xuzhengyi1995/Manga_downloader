@@ -4,8 +4,8 @@ Website actions for coma.jp novels
 import base64
 import time
 
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 try:
     from abstract_website_actions import WebsiteActions

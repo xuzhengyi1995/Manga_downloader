@@ -3,8 +3,8 @@ Website actions for bookwalker.com.tw
 '''
 import base64
 
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 try:
     from abstract_website_actions import WebsiteActions

@@ -14,7 +14,7 @@ class WebsiteActions:
     def __init__(self):
         self.class_name = self.__class__.__name__
 
-    def get_class_name(self)->str:
+    def get_class_name(self) -> str:
         '''
         Get class name.
         '''
@@ -22,7 +22,7 @@ class WebsiteActions:
 
     @staticmethod
     @abstractmethod
-    def check_url(manga_url)->bool:
+    def check_url(manga_url) -> bool:
         '''
         Give a manga url and check if the website is this class.
         '''
@@ -30,21 +30,21 @@ class WebsiteActions:
 
     @property
     @abstractmethod
-    def login_url(self)->str:
+    def login_url(self) -> str:
         '''
         Login url property.
         '''
         pass
 
     @abstractmethod
-    def get_sum_page_count(self, driver)->int:
+    def get_sum_page_count(self, driver) -> int:
         '''
         Get sum page count on for the manga.
         '''
         pass
 
     @abstractmethod
-    def move_to_page(self, driver, page)->bool:
+    def move_to_page(self, driver, page) -> bool:
         '''
         Move to given page.
         '''
@@ -71,7 +71,7 @@ class WebsiteActions:
         pass
 
     @abstractmethod
-    def get_now_page(self, driver)->int:
+    def get_now_page(self, driver) -> int:
         '''
         Get now page.
         '''

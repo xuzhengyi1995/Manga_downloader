@@ -1,5 +1,27 @@
 # NEW METHOD FOR BW TO TRY!
 
+# New Version
+## v0.2
+This version is based on Chromium 106.0.5243.0, the changes are below:
+- Support `https://ebook.tongli.com.tw`, will save the downloaded images in the `C:\bw_export_data\TONGLI_URL_STRING`
+- Support `https://www.dlsite.com`, but this is saving the cache images, so the final 3~4 pages should be downloaded as below (for example we have 10 pages):
+  - Go through page 1 to 10 (Make sure the current page is full loaded when you go to next page).
+  - You will find that at page 10, there are maybe only images for page 1-7.
+  - Go back from page 10 to page 5, you will find that the final pages are saved. (but maybe in reverse order)
+  - Currently we could not do anything better than this.
+ - Maybe slitely faster for BW and may download some images that width > height.
+
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.2) or here: [Windows x64 release build v0.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.2/BW-downloader-chrome-v0.2.7z)
+
+How to use (Same as the old version):
+1.  Unzip the file `BW-downloader-chrome-bin.zip`.
+2.  Open a `powsershell` or `cmd`, `cd` to the unzipped browser dir.
+3.  Open the browser with command line `.\chrome.exe --user-data-dir=c:\bw-downloader-profile --no-sandbox`
+4.  Browser the manga, manga will be saved to `C:\bw_export_data`
+
+**Do not use it for other website, only use it as a Managa downloader, it is not as safe as normal chrome browser!**
+
+# Old Version
 Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.1) or here: [Windows x64 release build v0.1](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.1/BW-downloader-chrome-v0.1.7z)
 
 **If you are finding something to download BW, please try this method for BW, it's really a good thing to try, you will like it!**

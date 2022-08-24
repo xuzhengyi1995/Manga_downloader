@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  python:
+    container_name: mangadw
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app

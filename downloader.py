@@ -6,6 +6,7 @@ import os
 import random
 import time
 from io import BytesIO
+from PIL import ImageOps
 
 import PIL.Image as pil_image
 import undetected_chromedriver as uc
@@ -61,6 +62,7 @@ class Downloader:
         self.file_name_model += '%%0%dd.png' % number_of_digits
         self.start_page = start_page - 1 if start_page and start_page > 0 else 0
         self.end_page = end_page
+        self.image_box = None
 
         self.init_function()
 
@@ -156,6 +158,14 @@ class Downloader:
                 with open(this_image_dir + self.file_name_model % i, 'wb') as img_file:
                     if self.cut_image is None:
                         img_file.write(image_data)
+                    elif self.cut_image == "dynamic":
+                        org_img = pil_image.open(BytesIO(image_data))
+                        if self.image_box is None:
+                            org_img.load()
+                            invert_im = org_img.convert("RGB")
+                            invert_im = ImageOps.invert(invert_im)
+                            self.image_box = invert_im.getbbox()
+                        org_img.crop(self.image_box).save(img_file, format='PNG')
                     else:
                         org_img = pil_image.open(BytesIO(image_data))
                         width, height = org_img.size
@@ -165,6 +175,7 @@ class Downloader:
                 logging.info('Page %d Downloaded', i + 1)
                 if i == page_count - 1:
                     logging.info('Finished.')
+                    self.image_box = None
                     return
 
                 self.actions_class.move_to_page(driver, i + 1)
@@ -179,6 +190,7 @@ class Downloader:
             driver.save_screenshot('./error.png')
             logging.error('Something wrong or download finished,Please check the error.png to see the web page.\r\nNormally, you should logout and login, then renew the cookies to solve this problem.')
             logging.error(err)
+            self.image_box = None
             return
 
     def download(self):

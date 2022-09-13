@@ -25,6 +25,8 @@ settings = {
     'loading_wait_time': 20,
     # Cut image, (left, upper, right, lower) in pixel, None means do not cut the image. This often used to cut the edge.
     # Like (0, 0, 0, 3) means cut 3 pixel from bottom of the image.
+    # or set dynamic to allow the scrypt to cut_images dynamictly (This work only correct if start_page is None)
+    # this removed whitespace on the corners, initialised by the Cover.
     'cut_image': None,
     # File name prefix, if you want your file name like 'klk_v1_001.jpg', write 'klk_v1' here.
     'file_name_prefix': '',

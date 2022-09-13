@@ -113,7 +113,7 @@ class Downloader:
         })
 
     def init_function(self):
-        if self.cut_image is not None:
+        if self.cut_image is not None and self.cut_image != 'dynamic':
             self.left, self.upper, self.right, self.lower = self.cut_image
         self.get_driver()
         random.seed()

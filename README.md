@@ -9,6 +9,10 @@ This version is based on Chromium 106.0.5243.0, the changes are below:
   - You will find that at page 10, there are maybe only images for page 1-7.
   - Go back from page 10 to page 5, you will find that the final pages are saved. (but maybe in reverse order)
   - Currently we could not do anything better than this.
+ - Works for `https://book.dmm.com`, use the script below to move page:
+ ```js
+   window.i=0;setInterval(()=>{NFBR.a6G.Initializer.views_.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+ ```
  - Maybe slitely faster for BW and may download some images that width > height.
 
 Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.2) or here: [Windows x64 release build v0.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.2/BW-downloader-chrome-v0.2.7z)

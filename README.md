@@ -1,6 +1,11 @@
 # NEW METHOD FOR BW TO TRY!
 
 # New Version
+## v0.2.1
+Pump Chromium to 109.0.5393, may fix some problems.
+
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.2.1) or here: [Windows x64 release build v0.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.2.1/BW-downloader-chrome-v0.2.1.7z)
+
 ## v0.2
 This version is based on Chromium 106.0.5243.0, the changes are below:
 - Support `https://ebook.tongli.com.tw`, will save the downloaded images in the `C:\bw_export_data\TONGLI_URL_STRING`

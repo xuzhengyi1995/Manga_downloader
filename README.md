@@ -1,6 +1,11 @@
 # NEW METHOD FOR BW TO TRY!
 
 # New Version
+## v0.3.1
+This version has improved the performance about saving snapshot, if you have some problems that the browser become very slow during downloading, please try the new version.
+
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.3.1) or here: [Windows x64 release build v0.3.1](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.3.1/BW-downloader-chrome-v0.3.1.7z)
+
 ## v0.3
 Fixed the problem that some manga has width less than 800px could not be downloaded, see [#113](/../../issues/113).
 

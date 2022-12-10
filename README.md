@@ -11,6 +11,8 @@ This version has some good features below for BW:
 Example screenshot:
 ![1670681578(1)](https://user-images.githubusercontent.com/29002064/206859972-0c775ee2-02fd-4d62-8870-4cd262fc6116.jpg)
 
+If you find the file name all become "cover_or_extra_xxx" when downloading some manga, please file a bug, there may be more URL patterns in BW than I have seen or they changed the pattern, it should be covered to make the page number working correctly.
+
 Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.3.2) or here: [Windows x64 release build v0.3.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.3.2/BW-downloader-chrome-v0.3.2.7z)
 
 ## v0.3.1

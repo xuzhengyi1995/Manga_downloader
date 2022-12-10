@@ -1,6 +1,18 @@
 # NEW METHOD FOR BW TO TRY!
 
 # New Version
+## v0.3.2 (Update Recommanded)
+This version has some good features below for BW:
+- Could download the cover (If the cover image is jpeg, please check it or better convert it to png before you share it, because the jpeg file will contain your BW account info).
+- Could name the image automictically using the page number, you can start at any page you want and go forward or go back!
+- Could name the folder with the BW uuid but not a random one anymore.
+- No more blank or repeating page will be skipped, no more image hash to check repeating page, better performance.
+
+Example screenshot:
+![1670681578(1)](https://user-images.githubusercontent.com/29002064/206859972-0c775ee2-02fd-4d62-8870-4cd262fc6116.jpg)
+
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.3.2) or here: [Windows x64 release build v0.3.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.3.2/BW-downloader-chrome-v0.3.2.7z)
+
 ## v0.3.1
 This version has improved the performance about saving snapshot, if you have some problems that the browser become very slow during downloading, please try the new version.
 

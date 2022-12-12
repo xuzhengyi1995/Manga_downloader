@@ -42,6 +42,10 @@ This version is based on Chromium 106.0.5243.0, the changes are below:
  ```js
    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.views_.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
  ```
+ The script above is for **DMM**, for **BW** please use the script below:
+ ```js
+   window.i=0;setInterval(()=>{NFBR.a6G.Initializer.Z4p.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+ ```
  - Maybe slitely faster for BW and may download some images that width > height.
 
 Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.2) or here: [Windows x64 release build v0.2](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.2/BW-downloader-chrome-v0.2.7z)

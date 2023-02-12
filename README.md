@@ -1,7 +1,13 @@
 # NEW METHOD FOR BW TO TRY!
 
 # New Version
-## v0.3.2 (Update Recommended)
+## v0.3.3 (Update Recommended)
+- Update to Chromium 112.0.5590.0.
+- Better support for BW books page number pattern, support novels.
+
+Download it in the [release](https://github.com/xuzhengyi1995/Manga_downloader/releases/tag/BW-downloader-chrome-v0.3.3) or here: [Windows x64 release build v0.3.3](https://github.com/xuzhengyi1995/Manga_downloader/releases/download/BW-downloader-chrome-v0.3.3/BW-downloader-chrome-v0.3.3.7z)
+
+## v0.3.2
 This version has some good features below for BW:
 - Could download the cover (If the cover image is jpeg, please check it or better convert it to png before you share it, because the jpeg file will contain your BW account info).
 - Could name the image automictically using the page number, you can start at any page you want and go forward or go back!

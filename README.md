@@ -50,7 +50,7 @@ This version is based on Chromium 106.0.5243.0, the changes are below:
  ```
  The script above is for **DMM**, for **BW** please use the script below:
  ```js
-   window.i=0;setInterval(()=>{NFBR.a6G.Initializer.d9M.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+   window.i=0;setInterval(()=>{NFBR.a6G.Initializer.L7v.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
  ```
  - Maybe slitely faster for BW and may download some images that width > height.
 
@@ -91,7 +91,7 @@ Clone this repo or only download the [BW-downloader-chrome-bin.zip](https://gith
 
     You can also manually click the mouse left button / use a keyboard arrow key / use a keyboard simulation software to move the page, you can choose the way you like, just make sure the page is moving.
     ```js
-    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.d9M.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
+    window.i=0;setInterval(()=>{NFBR.a6G.Initializer.L7v.menu.options.a6l.moveToPage(window.i);console.log(window.i);window.i++;},3000)
     ```
     
     If this not work and show 'Uncaught TypeError: Cannot read properties of undefined (reading 'menu') at <anonymous>:1:54', it means BW has updated the js, you can try to find it in the console, just try `NFBR.a6G.Initializer.*.menu` is not `undefined` and the * is the new object name; Or you can just file a bug.

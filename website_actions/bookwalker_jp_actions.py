@@ -17,6 +17,7 @@ class BookwalkerJP(WebsiteActions):
     bookwalker.jp
     '''
     login_url = 'https://member.bookwalker.jp/app/03/login'
+    js = ''
 
     def check_is_loading(self, list_ele):
         '''
@@ -38,7 +39,7 @@ class BookwalkerJP(WebsiteActions):
 
     def move_to_page(self, driver, page):
         driver.execute_script(
-            'NFBR.a6G.Initializer.Z4p.menu.options.a6l.moveToPage(%d)' % page)
+            f'NFBR.a6G.Initializer.{self.js}.menu.options.a6l.moveToPage(%d)' % page)
 
     def wait_loading(self, driver):
         WebDriverWait(driver, 600).until_not(lambda x: self.check_is_loading(
@@ -52,3 +53,9 @@ class BookwalkerJP(WebsiteActions):
 
     def get_now_page(self, driver):
         return int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])
+    
+    def before_download(self, driver):
+        for key in driver.execute_script('return Object.keys(NFBR.a6G.Initializer)'):
+            if 'menu' in driver.execute_script(f'return Object.keys(NFBR.a6G.Initializer.{key})'):
+                self.js = key
+                break

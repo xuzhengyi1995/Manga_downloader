@@ -216,7 +216,7 @@ settings = {
     **Remember to go to the links below to get the cookies!**
 
     1.  For [Bookwalker.jp] cookies, go [here](https://member.bookwalker.jp/app/03/my/profile).
-    2.  For [Bookwalker.com.jp] cookies, go [here](https://www.bookwalker.com.tw/member).
+    2.  For [Bookwalker.com.tw] cookies, go [here](https://www.bookwalker.com.tw/member).
     3.  For [www.cmoa.jp] cookies, go [here](https://www.cmoa.jp/) and you **must** get cookies by plug-in [EditThisCookie](http://www.editthiscookie.com/), download it for chrome [here](https://chrome.google.com/webstore/detail/edit-this-cookie/fngmhnnpilhplaeedifhccceomclgfbg).
 
     -   For `EditThisCookie`, this can be used in any website above, but for `cmoa` you **must** use this method

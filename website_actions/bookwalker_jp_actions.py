@@ -35,7 +35,7 @@ class BookwalkerJP(WebsiteActions):
         return manga_url.find('bookwalker.jp') != -1
 
     def get_sum_page_count(self, driver):
-        return int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[1])
+        return int(str(driver.find_element(By.ID, 'pageSliderCounter').get_attribute('textContent')).split('/')[1])
 
     def move_to_page(self, driver, page):
         driver.execute_script(
@@ -52,7 +52,7 @@ class BookwalkerJP(WebsiteActions):
         return base64.b64decode(img_base64)
 
     def get_now_page(self, driver):
-        return int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])
+        return int(str(driver.find_element(By.ID, 'pageSliderCounter').get_attribute('textContent')).split('/')[0])
     
     def before_download(self, driver):
         for key in driver.execute_script('return Object.keys(NFBR.a6G.Initializer)'):

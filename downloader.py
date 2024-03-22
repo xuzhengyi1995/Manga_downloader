@@ -1,6 +1,7 @@
 '''
 Main downloader, XU Zhengyi, 2020/05/05
 '''
+import base64
 import logging
 import os
 import random
@@ -80,17 +81,23 @@ class Downloader:
             logging.error('This website has not been added...')
             raise NotImplementedError
 
+    def str_to_data_uri(self, str):
+        return ("data:text/plain;charset=utf-8;base64,%s" %
+                base64.b64encode(bytes(str, 'utf-8')).decode('ascii'))
+
     def get_driver(self):
         option = uc.ChromeOptions()
         option.set_capability('unhandledPromptBehavior', 'accept')
         option.add_argument('--high-dpi-support=1')
         option.add_argument('--device-scale-factor=1')
         option.add_argument('--force-device-scale-factor=1')
-        option.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36')
-        option.add_argument('--window-size=%d,%d' % self.res)
+        option.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
+        option.add_argument("--app=%s" % self.str_to_data_uri('Manga_downloader'))
         option.add_argument('--headless')
-        # self.driver = webdriver.Chrome(chrome_options=option)
         self.driver = uc.Chrome(options=option)
+        self.driver.set_window_size(self.res[0], self.res[1])
+        viewport_dimensions = self.driver.execute_script("return [window.innerWidth, window.innerHeight];")
+        logging.info('Viewport dimensions %s', viewport_dimensions)
         self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
             "source": """
               Object.defineProperty(navigator, 'webdriver', {
@@ -131,7 +138,6 @@ class Downloader:
             os.mkdir(this_image_dir)
         logging.info('Loading Book page...')
         driver = self.driver
-        driver.set_window_size(self.res[0], self.res[1])
         driver.get(this_manga_url)
         logging.info('Book page Loaded...')
         logging.info('Preparing for downloading...')

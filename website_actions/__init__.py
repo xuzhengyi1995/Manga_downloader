@@ -1,9 +1,7 @@
 '''
 Website actions
 '''
-import glob
-from os.path import basename, dirname, isfile, join
+from website_actions.abstract_website_actions import Book, WebsiteActions, clean_text
+from website_actions.bookwalker_tw_actions import BookwalkerTW, is_bookwalker_url
 
-modules = glob.glob(join(dirname(__file__), "*.py"))
-__all__ = [basename(f)[:-3] for f in modules if isfile(f)
-           and not f.endswith('__init__.py')]
+__all__ = ['Book', 'WebsiteActions', 'BookwalkerTW', 'clean_text', 'is_bookwalker_url']

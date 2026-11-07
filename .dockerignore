@@ -1,0 +1,13 @@
+# Keep local/session data out of the image (Docker does not read .gitignore)
+.git
+.gitignore
+.dockerignore
+**/__pycache__
+*.pyc
+downloads/
+**/error.html
+**/error.png
+*cookies*.json
+.env
+venv/
+.venv/

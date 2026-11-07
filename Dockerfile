@@ -1,34 +1,22 @@
-FROM python:3.8
+FROM python:3.12-slim
 
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+# Google Chrome (stable). chromedriver is fetched automatically by Selenium Manager.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget gnupg ca-certificates \
+    && install -d -m 0755 /etc/apt/keyrings \
+    && wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" \
+       > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends google-chrome-stable fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
 
-# Updating apt to see and install Google Chrome
-RUN apt-get -y update
-
-# Magic happens
-RUN apt-get install -y google-chrome-stable
-
-# Installing Unzip
-RUN apt-get install -yqq unzip
-
-# Download the Chrome Driver
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/ \
-    && curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE \
-    | xargs -I{} wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/{}/chromedriver_linux64.zip \
-    && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && rm /tmp/chromedriver.zip
-
-# Set display port as an environment variable
-ENV DISPLAY=:99
-
-WORKDIR /usr/src/app
-
-COPY . /app
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 
-RUN pip install --upgrade pip
-
-RUN pip install -r requirements.txt
-
-CMD python main.py
+# Log in on the host (`python main.py login`) and mount the cookie file, e.g.
+#   docker compose run --rm mangadw download --select 1 -o /downloads
+ENV BW_COOKIES=/session/bw_tw_cookies.json
+ENTRYPOINT ["python", "main.py"]

@@ -1,9 +1,12 @@
-version: "3.7"
 services:
-  python:
+  mangadw:
     container_name: mangadw
     build:
       context: .
       dockerfile: Dockerfile
+    shm_size: "1gb"
     volumes:
-      - .:/app
+      # Cookie file created on the host by `python main.py login`
+      - ${HOME:-${USERPROFILE}}/.manga_downloader:/session:ro
+      - ./downloads:/downloads
+    # Usage: docker compose run --rm mangadw download --select 1 -o /downloads

@@ -1,223 +1,150 @@
 '''
 Main downloader, XU Zhengyi, 2020/05/05
 '''
-import base64
 import logging
-import os
 import random
+import re
 import time
 from io import BytesIO
-from PIL import ImageOps
+from pathlib import Path
 
-import PIL.Image as pil_image
-import undetected_chromedriver as uc
-from selenium.webdriver.support.ui import WebDriverWait
+from PIL import Image, ImageOps
 
-# DO NOT REMOVE THIS LINE. Used for __subclasses__()
-from website_actions import *
-from website_actions.abstract_website_actions import WebsiteActions
-
-logging.basicConfig(format='[%(levelname)s](%(name)s) %(asctime)s : %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
+_ILLEGAL_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f\x7f-\x9f]')
+_WINDOWS_RESERVED = re.compile(r'(CON|PRN|AUX|NUL|COM[0-9¹²³]|LPT[0-9¹²³])(\..*)?', re.I)
+_PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
 
 
-def get_cookie_dict(cookies):
-    cookies_split = cookies.split('; ')
-    if len(cookies_split) == 1:
-        cookies_split = cookies.split(';')
-    cookies_dict = {}
-    for i in cookies_split:
-        if i == '':
-            continue
-        kv = i.split('=')
-        cookies_dict[kv[0]] = '='.join(kv[1:])
-    return cookies_dict
+def _clean_component(name):
+    name = _ILLEGAL_CHARS.sub('_', str(name or ''))[:150].strip().rstrip('. ')
+    if _WINDOWS_RESERVED.fullmatch(name):
+        name = '_' + name
+    return name
 
 
-def add_cookies(driver, cookies):
-    for i in cookies:
-        driver.add_cookie({'name': i, 'value': cookies[i]})
+def sanitize_folder_name(name, fallback='book'):
+    '''A single safe path component. The fallback (the book id) is sanitized too,
+    because ids come from page-controlled JavaScript.'''
+    return _clean_component(name) or _clean_component(fallback) or 'book'
 
 
 class Downloader:
     '''
-    Main download class
+    Downloads every page of a book currently opened in the given driver.
     '''
 
-    def __init__(
-            self, manga_url, cookies, imgdir, res, sleep_time=2, loading_wait_time=20,
-            cut_image=None, file_name_prefix='', number_of_digits=3, start_page=None,
-            end_page=None
-    ):
-        self.manga_url = manga_url
-        self.cookies = get_cookie_dict(cookies)
-        self.imgdir = imgdir
-        self.res = res
+    def __init__(self, driver, actions, output_dir, sleep_time=1.0, loading_wait_time=20,
+                 cut_image=None, file_name_prefix='', number_of_digits=3,
+                 start_page=None, end_page=None, save_page_source=False):
+        self.driver = driver
+        self.actions = actions
+        self.output_dir = Path(output_dir)
         self.sleep_time = sleep_time
         self.loading_wait_time = loading_wait_time
         self.cut_image = cut_image
-        self.file_name_model = '/'
-        if len(file_name_prefix) != 0:
-            self.file_name_model += file_name_prefix + '_'
-
-        self.file_name_model += '%%0%dd.png' % number_of_digits
+        prefix = _clean_component(file_name_prefix)
+        prefix = f'{prefix}_'.replace('%', '%%') if prefix else ''
+        self.file_name_model = prefix + '%%0%dd.png' % max(1, min(int(number_of_digits), 9))
         self.start_page = start_page - 1 if start_page and start_page > 0 else 0
         self.end_page = end_page
+        self.save_page_source = save_page_source
         self.image_box = None
 
-        self.init_function()
+    def _save(self, path, image_data):
+        if not image_data.startswith(_PNG_SIGNATURE):
+            raise RuntimeError('Page data is not a PNG image')
+        if self.cut_image is None:
+            path.write_bytes(image_data)
+            return
+        # Only the PNG decoder may parse page-supplied bytes.
+        with Image.open(BytesIO(image_data), formats=['PNG']) as img:
+            if self.cut_image == 'dynamic':
+                if self.image_box is None:
+                    self.image_box = ImageOps.invert(img.convert('RGB')).getbbox()
+                img.crop(self.image_box).save(path, format='PNG')
+            else:
+                left, upper, right, lower = self.cut_image
+                width, height = img.size
+                img.crop((left, upper, width - right, height - lower)).save(path, format='PNG')
 
-    def check_implementation(self, this_manga_url):
-        is_implemented_website = False
-        for temp_actions_class in WebsiteActions.__subclasses__():
-            if temp_actions_class.check_url(this_manga_url):
-                is_implemented_website = True
-                self.actions_class = temp_actions_class()
-                logging.info('Find action class, use %s class.',
-                             self.actions_class.get_class_name())
-                break
-
-        if not is_implemented_website:
-            logging.error('This website has not been added...')
-            raise NotImplementedError
-
-    def str_to_data_uri(self, str):
-        return ("data:text/plain;charset=utf-8;base64,%s" %
-                base64.b64encode(bytes(str, 'utf-8')).decode('ascii'))
-
-    def get_driver(self):
-        option = uc.ChromeOptions()
-        option.set_capability('unhandledPromptBehavior', 'accept')
-        option.add_argument('--high-dpi-support=1')
-        option.add_argument('--device-scale-factor=1')
-        option.add_argument('--force-device-scale-factor=1')
-        option.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
-        option.add_argument("--app=%s" % self.str_to_data_uri('Manga_downloader'))
-        option.add_argument('--headless')
-        self.driver = uc.Chrome(options=option)
-        self.driver.set_window_size(self.res[0], self.res[1])
-        viewport_dimensions = self.driver.execute_script("return [window.innerWidth, window.innerHeight];")
-        logging.info('Viewport dimensions %s', viewport_dimensions)
-        self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-            "source": """
-              Object.defineProperty(navigator, 'webdriver', {
-                get: () => false
-              })
-              window.navigator.chrome = undefined;
-              Object.defineProperty(navigator, 'languages', {
-                get: () => ['en-US', 'en'],
-              });
-              Object.defineProperty(navigator, 'plugins', {
-                get: () => [1, 2, 3, 4, 5],
-              });
-              const originalQuery = window.navigator.permissions.query;
-              window.navigator.permissions.query = (parameters) => (
-                parameters.name === 'notifications' ?
-                Promise.resolve({ state: Notification.permission }) :
-                originalQuery(parameters)
-              );
-            """
-        })
-
-    def init_function(self):
-        if self.cut_image is not None and self.cut_image != 'dynamic':
-            self.left, self.upper, self.right, self.lower = self.cut_image
-        self.get_driver()
-        random.seed()
-
-    def login(self):
-        logging.info('Login...')
-        driver = self.driver
-        driver.get(self.actions_class.login_url)
-        driver.delete_all_cookies()
-        add_cookies(driver, self.cookies)
-        logging.info('Login finished...')
-
-    def prepare_download(self, this_image_dir, this_manga_url):
-        if not os.path.isdir(this_image_dir):
-            os.mkdir(this_image_dir)
-        logging.info('Loading Book page...')
-        driver = self.driver
-        driver.get(this_manga_url)
-        logging.info('Book page Loaded...')
-        logging.info('Preparing for downloading...')
-        time.sleep(self.loading_wait_time)
-
-    def download_book(self, this_image_dir):
-        driver = self.driver
-        logging.info('Run before downloading...')
-        self.actions_class.before_download(driver)
-        logging.info('Start download...')
+    def download_book(self, book, folder_name=None):
+        '''Open ``book`` in the viewer and save all pages. Return True on success.'''
+        driver, actions = self.driver, self.actions
+        self.image_box = None
+        title = book.title
+        book_dir = self.output_dir / sanitize_folder_name(folder_name or title, book.id)
         try:
-            page_count = self.actions_class.get_sum_page_count(driver)
-            logging.info('Has %d pages.', page_count)
-            end_page = page_count
-            if self.end_page and self.end_page <= page_count:
-                end_page = self.end_page
-            self.actions_class.move_to_page(driver, self.start_page)
+            logging.info('Loading %s', book.read_url)
+            driver.get(book.read_url)
+            time.sleep(self.loading_wait_time)
+            actions.before_download(driver)
 
-            time.sleep(self.sleep_time)
+            title = book.title or actions.get_book_title(driver)
+            book_dir = self.output_dir / sanitize_folder_name(folder_name or title, book.id)
+            book_dir.mkdir(parents=True, exist_ok=True)
+            logging.info('Saving "%s" to %s', title, book_dir)
 
+            page_count = actions.get_sum_page_count(driver)
+            end_page = min(self.end_page, page_count) if self.end_page else page_count
+            logging.info('Book has %d pages, downloading %d-%d',
+                         page_count, self.start_page + 1, end_page)
+            self._goto(self.start_page)
+
+            last_hash = None
             for i in range(self.start_page, end_page):
-                self.actions_class.wait_loading(driver)
-                image_data = self.actions_class.get_imgdata(driver, i + 1)
-                with open(this_image_dir + self.file_name_model % i, 'wb') as img_file:
-                    if self.cut_image is None:
-                        img_file.write(image_data)
-                    elif self.cut_image == "dynamic":
-                        org_img = pil_image.open(BytesIO(image_data))
-                        if self.image_box is None:
-                            org_img.load()
-                            invert_im = org_img.convert("RGB")
-                            invert_im = ImageOps.invert(invert_im)
-                            self.image_box = invert_im.getbbox()
-                        org_img.crop(self.image_box).save(img_file, format='PNG')
-                    else:
-                        org_img = pil_image.open(BytesIO(image_data))
-                        width, height = org_img.size
-                        org_img.crop(
-                            (self.left, self.upper, width - self.right, height - self.lower)).save(img_file, format='PNG')
+                path = book_dir / (self.file_name_model % i)
+                if path.exists():
+                    logging.info('Page %d exists, skipped', i + 1)
+                else:
+                    actions.wait_loading(driver)
+                    time.sleep(self.sleep_time)
+                    image_data = actions.get_imgdata(driver, i + 1)
+                    digest = actions.image_hash(image_data)
+                    if digest == last_hash:
+                        logging.warning('Page %d looks identical to the previous page', i + 1)
+                    last_hash = digest
+                    self._save(path, image_data)
+                    logging.info('Page %d/%d downloaded', i + 1, page_count)
 
-                logging.info('Page %d Downloaded', i + 1)
-                if i == page_count - 1:
-                    logging.info('Finished.')
-                    self.image_box = None
-                    return
+                if i + 1 >= end_page:
+                    break
+                if not actions.move_to_page(driver, i + 1):
+                    if actions.get_now_page(driver) >= page_count:
+                        logging.info('Reached the last page.')
+                        break
+                    raise RuntimeError(f'Could not flip to page {i + 2}')
+                time.sleep(random.random())
+            logging.info('Finished "%s".', title)
+            return True
+        except Exception as err:  # keep diagnostics for any viewer failure
+            err = str(err).strip() or type(err).__name__
+            saved = []
+            try:
+                book_dir.mkdir(parents=True, exist_ok=True)
+                driver.save_screenshot(str(book_dir / 'error.png'))
+                saved.append('error.png')
+                # The logged-in page source can contain account details (email, member id,
+                # CSRF token), so it is only written when explicitly requested.
+                if self.save_page_source:
+                    (book_dir / 'error.html').write_text(driver.page_source, encoding='utf-8')
+                    saved.append('error.html')
+            except Exception as diag_err:  # a dead driver must not hide the real error
+                logging.warning('Could not save diagnostics: %s', diag_err)
+            logging.error('Download failed: %s. %s'
+                          'If you were logged out, run `python main.py login`.', err,
+                          f'See {", ".join(saved)} in {book_dir}. ' if saved else '')
+            return False
 
-                self.actions_class.move_to_page(driver, i + 1)
-
-                WebDriverWait(driver, 300).until_not(
-                    lambda x: self.actions_class.get_now_page(x) == i + 1)
-
-                time.sleep(self.sleep_time + random.random() * 2)
-        except Exception as err:
-            with open("error.html", "w", encoding="utf-8") as err_source:
-                err_source.write(driver.page_source)
-            driver.save_screenshot('./error.png')
-            logging.error('Something wrong or download finished,Please check the error.png to see the web page.\r\nNormally, you should logout and login, then renew the cookies to solve this problem.')
-            logging.error(err)
-            self.image_box = None
+    def _goto(self, page):
+        '''Go to a 0-based page, stepping one page at a time if the API is unavailable.'''
+        # The viewer may reopen at the last-read page, so always seek explicitly.
+        if self.actions.move_to_page(self.driver, page):
             return
-
-    def download(self):
-        total_manga = len(self.manga_url)
-        total_dir = len(self.imgdir)
-        if total_manga != total_dir:
-            logging.error('Total manga urls given not equal to imgdir.')
-            return
-
-        for i in range(total_manga):
-            t_manga_url = self.manga_url[i]
-            t_img_dir = self.imgdir[i]
-            self.check_implementation(t_manga_url)
-            if i == 0:
-                self.login()
-            logging.info("Starting download manga %d, imgdir: %s",
-                         i + 1, t_img_dir)
-            self.prepare_download(t_img_dir, t_manga_url)
-            self.download_book(t_img_dir)
-            logging.info("Finished download manga %d, imgdir: %s",
-                         i + 1, t_img_dir)
-            time.sleep(2)
-        self.driver.close()
-        self.driver.quit()
+        if self.actions.get_now_page(self.driver) > page + 1:
+            raise RuntimeError(
+                f'Viewer opened at page {self.actions.get_now_page(self.driver)} and cannot '
+                f'jump back to page {page + 1}. Reset the read position in the viewer and retry.')
+        while self.actions.get_now_page(self.driver) < page + 1:
+            current = self.actions.get_now_page(self.driver)
+            if not self.actions.move_to_page(self.driver, current):
+                raise RuntimeError(f'Could not reach start page {page + 1}')

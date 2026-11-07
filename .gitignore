@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Manga_downloader output / session
+downloads/
+error.png
+error.html
+*cookies*.json
